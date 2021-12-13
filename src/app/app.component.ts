@@ -12,10 +12,10 @@ export class AppComponent {
   hillGrade: FormControl;
   weight: FormControl;
   cda: FormControl;
-  wheelRadius: FormControl;
+  speedKmh: FormControl;
   torque: FormControl;
 
-  speed = 40 / 3.6;
+  speed = 0;
 
   row: any;
 
@@ -32,7 +32,7 @@ export class AppComponent {
     this.hillGrade = this.formBuilder.control(5);
     this.weight = this.formBuilder.control(1450);
     this.cda = this.formBuilder.control(0.6);
-    this.wheelRadius = this.formBuilder.control({value: 0.317, disabled: true} );
+    this.speedKmh = this.formBuilder.control(50);
     this.torque = this.formBuilder.control(140);
 
     this.hillGrade.valueChanges.subscribe(() => {
@@ -44,7 +44,7 @@ export class AppComponent {
     this.cda.valueChanges.subscribe(() => {
       this.recalculate();
     });
-    this.wheelRadius.valueChanges.subscribe(() => {
+    this.speedKmh.valueChanges.subscribe(() => {
       this.recalculate();
     });
     this.torque.valueChanges.subscribe(() => {
@@ -55,7 +55,10 @@ export class AppComponent {
   }
 
   recalculate() {
-    console.log('recalculating');
+    // console.log('recalculating');
+
+    this.speed = this.speedKmh.value / 3.6;
+
     this.climb = this.speed * this.hillGrade.value / 100;
     this.power = this.climb * this.weight.value * 9.81;
     this.aero_drag = 0.5 * 1.225 * Math.pow(this.speed, 3) * this.cda.value;
